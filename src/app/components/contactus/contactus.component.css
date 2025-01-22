@@ -1,0 +1,23 @@
+input, textarea, button {
+    padding: 8px;
+    margin-bottom: 8px;
+    width: 100%;
+}
+
+button {
+    cursor: pointer;
+}
+
+form {
+    width: 80%;
+}
+
+.main{ 
+    margin: 40px 20%;
+    padding: 20px;
+    border: 2px solid #ccc;
+}
+
+p {
+    word-wrap: break-word;
+}

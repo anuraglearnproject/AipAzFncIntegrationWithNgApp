@@ -1,0 +1,24 @@
+<div class="main">
+    <h2>Contact Us</h2>
+    <form (ngSubmit)="onSubmit()" [formGroup]="contactForm">
+      <div>
+        <input id="name" formControlName="name" placeholder="Name" />
+      </div>
+  
+      <div>
+        <input id="toEmail" formControlName="toEmail" placeholder="Email" />
+      </div>
+  
+      <div>
+        <input id="subject" formControlName="subject" placeholder="Subject" />
+      </div>
+  
+      <div>
+        <textarea id="message" formControlName="message" placeholder="Message"></textarea>
+      </div>
+  
+      <button type="submit" [disabled]="contactForm.invalid">Submit</button>
+      <p>{{loading}}</p>
+    </form>
+  </div>
+  
