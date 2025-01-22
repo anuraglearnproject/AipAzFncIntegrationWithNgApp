@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './contactus.component.css'
 })
 export class ContactusComponent implements OnInit {
-  loading:string = '';
+  loading: string = '';
   contactForm: FormGroup;
   constructor(private fb: FormBuilder, private http: HttpClient) {
     // Initialize the form group in the constructor if you prefer
@@ -39,18 +39,28 @@ export class ContactusComponent implements OnInit {
   }
 
   sendEmail(formData: any): void {
-    //const url = 'https://aipazfunction.azurewebsites.net/api/SendContactDetails';
+    let url = 'https://aipazfunction.azurewebsites.net/api/SendContactDetails';
     //const url = 'http://localhost:7071/api/SendContactDetails';
-    const url = 'http://localhost:7071/api/SendContactDetails?name=Anurag&toEmail=anuraglearnproject@gmail.com&subject=Azure%20Function%20Testing&message=this%20is%20just%20a%20message%20body%20text.';
+    const headers = new HttpHeaders({
+      'x-functions-key': 'add your key here',  // Use your local function key here
+    });
+    //const url = 'https://aipazfunction.azurewebsites.net/api/SendContactDetails?name=Anurag&toEmail=anuraglearnproject@gmail.com&subject=Azure%20Function%20Testing&message=this%20is%20just%20a%20message%20body%20text.';
     this.loading = 'loading...';
-    this.http.post(url, null).subscribe({
-      next:(response) => {
+    let data = JSON.stringify(formData);
+    let jsonData = JSON.parse(data);
+    this.loading = 'processing: <br>' + data;
+    let queryString = new URLSearchParams(jsonData).toString();
+    url += "?" + queryString;
+    console.log(url);
+    this.http.get(url, { headers: headers }).subscribe({
+      next: (response) => {
         this.loading = 'Form submitted successfully: ' + JSON.stringify(response);
         this.loading += '<br><strong>Thank you for contacting us!?</strong>';
       },
-      error:(error)  => {
+      error: (error) => {
         console.error('Error submitting form:', error);
-        this.loading = 'Something went wrong. Please try again later.: ' + JSON.stringify(error);
+        this.loading = 'Something went wrong. Please try again later.: ' + JSON.stringify(error) +
+          " processed data: " + data;
       }
     });
   }
